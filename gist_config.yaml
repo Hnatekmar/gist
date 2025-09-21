@@ -1,0 +1,5 @@
+# Example config
+profiles:
+  - name: example
+    username: "Your Name"
+    email: "you@example.com"
