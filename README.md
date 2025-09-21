@@ -2,7 +2,7 @@
 > *“A quick gist of who you are – switch git personas in a snap.”*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/your‑org/gist)](https://github.com/your-org/gist/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Hnatekmar/gist)]([https://github.com/your-org](https://github.com/Hnatekmar/gist/releases)
 
 [GIST] is a tiny, cross‑platform CLI for managing **multiple Git user profiles** (name + email + optional GPG key) and switching between them on a per‑directory basis. No more manual `git config` gymnastics!
 
