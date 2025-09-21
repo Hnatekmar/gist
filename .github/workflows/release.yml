@@ -1,0 +1,59 @@
+name: CI and Release
+
+permissions:
+  # Allow creating tags and releases
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+    # Fetch full history for semantic versioning
+    # (fetch-depth is set in the checkout step)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Run tests
+        run: go test ./...
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Install go-semantic-release
+        run: go install github.com/caarlos0/go-semantic-release@latest
+
+      - name: Run semantic versioning
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: go-semantic-release
+
+      - name: Install Goreleaser
+        run: curl -sL https://git.io/goreleaser | bash
+
+      - name: Publish release with Goreleaser
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: goreleaser release --clean
