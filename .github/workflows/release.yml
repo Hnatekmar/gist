@@ -1,9 +1,5 @@
 name: CI and Release
 
-permissions:
-  # Allow creating tags and releases
-  contents: write
-
 on:
   push:
     branches:
@@ -26,34 +22,21 @@ jobs:
           go-version: '1.22'
 
       - name: Run tests
-        run: go test ./...
+        run: go test -v ./...
 
   release:
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      # Allow creating tags and releases
+      contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
         with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
+          go-version: 1.19
+      - uses: go-semantic-release/action@v1
         with:
-          go-version: '1.22'
-
-      - name: Install go-semantic-release
-        run: go install github.com/go-semantic-release/semantic-release@latest
-
-      - name: Run semantic versioning
+          hooks: goreleaser
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: go-semantic-release
-
-      - name: Install Goreleaser
-        run: curl -sL https://git.io/goreleaser | bash
-
-      - name: Publish release with Goreleaser
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: goreleaser release --clean
