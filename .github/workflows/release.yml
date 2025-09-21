@@ -43,7 +43,7 @@ jobs:
           go-version: '1.22'
 
       - name: Install go-semantic-release
-        run: go install github.com/caarlos0/go-semantic-release@latest
+        run: go install github.com/go-semantic-release/semantic-release@latest
 
       - name: Run semantic versioning
         env:
